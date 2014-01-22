@@ -1,14 +1,27 @@
-<ul>
-    <li ng-repeat="screen in screens">
-        <input type="checkbox" ng-model="linkMaps[screen.id]" ng-if="screen.id != $parent.selectedId"
+<div class="form-group">
+    <label for="path">Path</label>
+    <input type="text" class="form-control" id="path" placeholder="Enter path" ng-model="screenMetaData.absPath">
+    <select ng-options="screen.name for screen in screens" ng-model="landingScreen"></select>
+</div>
+<div ng-repeat="screen in screens" class="screens">
+    <div class="screen">
+        <input type="radio" ng-model="$parent.selectedId" ng-value="screen.id" ng-change="loadScreen()"/>
+        <input type="checkbox" ng-model="linkMaps[screen.id]" ng-if="showLinkCheckbox(screen.id)"
                ng-change="saveLinks()"/>
-        {{ screen.name }} : ({{ screen.fileName }})
-        <input type="radio" ng-model="$parent.selectedId" ng-value="screen.id" ng-change="getLinkMaps()"/>
-        [{{ linksCount(screen) }}]
-    </li>
-</ul>
-<div class="image" id="{{ selectedId }}">
+
+        <div class="image">
+            <img ng-src="{{ screenMetaData.absPath }}/images/{{ screen.fileName }}" alt="" style="width: 300px"/>
+            <span class="name">{{ screen.name }}</span>
+        </div>
+        <span class="count">{{ linksCount(screen) }}</span>
+    </div>
+
+</div>
+<div class="selected-screen" id="{{ selectedId }}">
+    <img ng-src="{{ screenMetaData.absPath }}/images/{{ selectedFileName }}"/>
     <a ng-repeat="link in links"
-       style="top:{{ link.top }}px; left:{{ link.left }}px; width:{{ link.width }}px; height:{{ link.height }}px"
-       class="link" ng-href="#" id="{{ link.target.id }}" draggable resizable><span>{{ link.target.name }}</span></a>
+       style="top:{{ link.top }}px; left:{{ link.left }}px; width:{{ link.width }}px; height:{{ link.height }}px; position:absolute"
+       class="link" ng-href="#" id="{{ link.target.id }}" draggable resizable data-draggable-handle="span.handle"
+       data-draggable-containment="div.selected-screen"><span class="handle">{{ link.target.name }} &nbsp; <i
+            class="fa fa-arrow-right"></i> </span></a>
 </div>

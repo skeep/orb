@@ -1,0 +1,22 @@
+{
+  "main": "index.html",
+  "name": "Orb",
+  "description": "demo app of node-webkit",
+  "version": "0.1.0",
+  "keywords": [ "demo", "node-webkit" ],
+  "window": {
+    "title": "Orb Beta",
+    "icon": "link.png",
+    "toolbar": true,
+    "frame": true,
+    "width": 800,
+    "height": 500,
+    "position": "center",
+    "min_width": 400,
+    "min_height": 200,
+    "fullsceen" : true
+  },
+  "webkit": {
+    "plugin": true
+  }
+}

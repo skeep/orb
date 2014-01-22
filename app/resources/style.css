@@ -1,0 +1,19 @@
+html, body{
+	margin:0; padding:0;
+}
+.screen{
+	position: relative;
+}
+.link{
+	display: block;
+	/*background: black;*/
+	/*color: white;*/
+	position: absolute;
+	z-index: 100;
+}
+
+img{
+	display: block;
+	max-width: 100%;
+	height: auto;
+}

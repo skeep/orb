@@ -285,7 +285,8 @@ module.exports = function (grunt) {
             'views/{,*/}*.html',
             'bower_components/**/*',
             'images/{,*/}*.{webp}',
-            'fonts/*'
+            'fonts/*',
+            'resources/*'
           ]
         }, {
           expand: true,
@@ -399,8 +400,8 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('default', [
-    'newer:jshint',
-    'test',
+//    'newer:jshint',
+//    'test',
     'build'
   ]);
 };
