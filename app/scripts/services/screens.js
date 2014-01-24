@@ -82,10 +82,6 @@ angular.module('orbApp').service('Screens', function Screens($http) {
     return s.join('');
   };
 
-  if (!isNodeApp()) {
-    screens.meta.absPath = 'storage';
-  }
-
   var add = function (fileName) {
     if (typeof screens.meta.fileKeyMap[fileName] === 'undefined') {
       var screenId = generateID();
@@ -102,37 +98,6 @@ angular.module('orbApp').service('Screens', function Screens($http) {
   };
 
   var list = function () {
-    var files;
-    if (!isNodeApp()) {
-      if (typeof localStorage.screens !== 'undefined') {
-        screens = JSON.parse(localStorage.screens);
-      }
-      else {
-        files = ['landing-final.jpg',
-          'screen3_lob_bar-view.jpg',
-          'screen7_project.jpg',
-          'screen10_actions.jpg',
-          'screen4_accounts.jpg',
-          'screen7_project_staffing.jpg',
-          'screen1_flc-G&A_revised.jpg',
-          'screen4_other_accounts.jpg',
-          'screen8_subcontractors.jpg',
-          'screen1_flc.jpg',
-          'screen5_all-projects-bar_view.jpg',
-          'screen9_span.jpg',
-          'screen1_landing.jpg',
-          'screen5_all-projects.jpg',
-          'screen2_lob_donut-view.jpg',
-          'screen6_selected-project.jpg'];
-        _.each(files, function (file) {
-          add(file);
-        });
-      }
-    } else {
-
-
-    }
-
     var screensArr = _.values(screens);
     screensArr.splice(0, 1);
 
@@ -140,7 +105,6 @@ angular.module('orbApp').service('Screens', function Screens($http) {
   };
 
   var initProject = function (absPath) {
-
 
     if (isNodeApp()) {
 
@@ -192,8 +156,33 @@ angular.module('orbApp').service('Screens', function Screens($http) {
         fs.mkdir(absPath + 'images');
       }
 
+    } else {
+      screens.meta.absPath = 'storage';
+      if (typeof localStorage.screens !== 'undefined') {
+        screens = JSON.parse(localStorage.screens);
+      }
+      else {
+        var files = ['landing-final.jpg',
+          'screen3_lob_bar-view.jpg',
+          'screen7_project.jpg',
+          'screen10_actions.jpg',
+          'screen4_accounts.jpg',
+          'screen7_project_staffing.jpg',
+          'screen1_flc-G&A_revised.jpg',
+          'screen4_other_accounts.jpg',
+          'screen8_subcontractors.jpg',
+          'screen1_flc.jpg',
+          'screen5_all-projects-bar_view.jpg',
+          'screen9_span.jpg',
+          'screen1_landing.jpg',
+          'screen5_all-projects.jpg',
+          'screen2_lob_donut-view.jpg',
+          'screen6_selected-project.jpg'];
+        _.each(files, function (file) {
+          add(file);
+        });
+      }
     }
-
 
   };
 

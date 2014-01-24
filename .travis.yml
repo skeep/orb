@@ -5,3 +5,7 @@ node_js:
 before_script:
   - 'npm install -g bower grunt-cli'
   - 'bower install'
+install:
+  - 'npm install'
+script:
+  - 'sh build.sh'

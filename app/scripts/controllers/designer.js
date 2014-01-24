@@ -90,6 +90,10 @@ angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routePara
     Screens.put.landingScreen(screen.id);
   });
 
+  $scope.$watch('screenMetaData.projectName', function(n){
+    Screens.put.projectName(n);
+  });
+
   $scope.refresh = function(){
     Screens.refresh();
     $scope.screens = Screens.list();
