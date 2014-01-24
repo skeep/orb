@@ -5,11 +5,15 @@ angular.module('orbApp', [
 ])
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
+      .when('/designer/:designId', {
+        templateUrl: 'views/designer.html',
+        controller: 'DesignerCtrl'
+      })
+      .when('/main', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/main'
       });
   });

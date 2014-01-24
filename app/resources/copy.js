@@ -1,9 +1,13 @@
 var fs = require('fs');
 
-var path = '/Users/Admin/Documents/GitHub/lop/www/';
 
-console.log(fs.createReadStream('style.css'));
+try {
+  var projectData = fs.readFileSync('a', {encoding: 'utf8'});
+  console.log(projectData);
+} catch (e) {
+  console.log(e);
+}
 
-fs.createReadStream('index.html').pipe(fs.createWriteStream(path + 'index.html'));
-fs.createReadStream('style.css').pipe(fs.createWriteStream(path + 'style.css'));
+
+
 

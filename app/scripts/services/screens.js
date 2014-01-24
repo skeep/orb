@@ -5,8 +5,8 @@ angular.module('orbApp').service('Screens', function Screens($http) {
     meta: {
       count: 0,
       fileKeyMap: {},
-//      absPath: '/Users/Admin/Documents/SSC Projects/ThaiBank/www/',
-      absPath: '/Users/Admin/Documents/GitHub/lop/www/',
+      absPath: '',
+      projectName: '',
       landingScreen: ''
     }
   };
@@ -29,7 +29,7 @@ angular.module('orbApp').service('Screens', function Screens($http) {
     }
   };
 
-  var storeInLS = function () {
+  var save = function () {
     if (isNodeApp()) {
       var fs = require('fs');
       var data = JSON.stringify(screens, null, 2);
@@ -43,29 +43,9 @@ angular.module('orbApp').service('Screens', function Screens($http) {
 
       scriptPromise.then(function (scriptFile) {
 
-        var scriptFile = scriptFile.data.replace(/<replaceMeWithProjectFile>/g, 'var projfile = ' + data);
+        scriptFile = scriptFile.data.replace(/replaceMeWithProjectFile;/g, 'var projfile = ' + data);
 
         fs.writeFile(screens.meta.absPath + 'app.js', scriptFile, function (err) {
-          if (err) {
-            console.log(err);
-          }
-        });
-      });
-
-      var indexPromise = $http.get('resources/index.html');
-
-      indexPromise.then(function (indexFile) {
-        fs.writeFile(screens.meta.absPath + 'index.html', indexFile.data, function (err) {
-          if (err) {
-            console.log(err);
-          }
-        });
-      });
-
-      var indexPromise = $http.get('resources/style.css');
-
-      indexPromise.then(function (styleFile) {
-        fs.writeFile(screens.meta.absPath + 'style.css', styleFile.data, function (err) {
           if (err) {
             console.log(err);
           }
@@ -117,7 +97,7 @@ angular.module('orbApp').service('Screens', function Screens($http) {
       };
       screens.meta.count = screens.meta.count + 1;
       screens.meta.fileKeyMap[fileName] = screenId;
-      storeInLS();
+      save();
     }
   };
 
@@ -149,18 +129,8 @@ angular.module('orbApp').service('Screens', function Screens($http) {
         });
       }
     } else {
-      var fs = require('fs');
-      var projectData = fs.readFileSync(screens.meta.absPath + 'projfile.json', {encoding: 'utf8'});
 
-      screens = JSON.parse(projectData);
 
-      files = fs.readdirSync(screens.meta.absPath + 'images/');
-
-      _.each(files, function (file) {
-        if (isImage(file)) {
-          add(file);
-        }
-      });
     }
 
     var screensArr = _.values(screens);
@@ -169,9 +139,81 @@ angular.module('orbApp').service('Screens', function Screens($http) {
     return screensArr;
   };
 
+  var initProject = function (absPath) {
+
+
+    if (isNodeApp()) {
+
+      var fs = require('fs');
+
+      try {
+        var projectData = fs.readFileSync(absPath + 'projfile.json', {encoding: 'utf8'});
+        screens = JSON.parse(projectData);
+      } catch (e) {
+
+//        var projectData = fs.readFileSync(screens.meta.absPath + 'projfile.json', {encoding: 'utf8'});
+//
+//        screens = JSON.parse(projectData);
+//
+
+        var projfilePromise = $http.get('resources/projfile.json');
+
+        projfilePromise.then(function (projFile) {
+          fs.writeFile(absPath + 'projfile.json', JSON.stringify(projFile.data), function (err) {
+            if (err) {
+              console.log(err);
+            }
+          });
+
+          screens.meta.absPath = absPath;
+          save();
+        });
+
+        var indexPromise = $http.get('resources/index.html');
+
+        indexPromise.then(function (indexFile) {
+          fs.writeFile(absPath + 'index.html', indexFile.data, function (err) {
+            if (err) {
+              console.log(err);
+            }
+          });
+        });
+
+        var stylePromise = $http.get('resources/style.css');
+
+        stylePromise.then(function (styleFile) {
+          fs.writeFile(absPath + 'style.css', styleFile.data, function (err) {
+            if (err) {
+              console.log(err);
+            }
+          });
+        });
+
+        fs.mkdir(absPath + 'images');
+      }
+
+    }
+
+
+  };
+
+  var refreshFiles = function () {
+    var fs = require('fs');
+
+    var files = fs.readdirSync(screens.meta.absPath + 'images/');
+
+    _.each(files, function (file) {
+      if (isImage(file)) {
+        add(file);
+      }
+    });
+  };
+
   return {
     add: add,
     list: list,
+    init: initProject,
+    refresh: refreshFiles,
     get: {
       linkMaps: function (id) {
         var linkObj = {};
@@ -220,25 +262,29 @@ angular.module('orbApp').service('Screens', function Screens($http) {
             }
           }
         });
-        storeInLS();
+        save();
       },
       linkPosition: function (screen, link, position) {
         screens[screen].links[link].top = position.top;
         screens[screen].links[link].left = position.left;
-        storeInLS();
+        save();
       },
       linkSize: function (screen, link, size) {
         screens[screen].links[link].height = size.height;
         screens[screen].links[link].width = size.width;
-        storeInLS();
+        save();
       },
       path: function (path) {
         screens.meta.absPath = path;
-        storeInLS();
+        save();
       },
       landingScreen: function (screen) {
         screens.meta.landingScreen = screen;
-        storeInLS();
+        save();
+      },
+      projectName: function (name) {
+        screens.meta.projectName = name;
+        save();
       }
     }
   };
