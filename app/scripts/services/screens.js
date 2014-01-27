@@ -1,4 +1,4 @@
-angular.module('orbApp').service('Screens', function Screens($http) {
+angular.module('orbApp').service('Screens', function Screens($http, File) {
   'use strict';
 
   var screens = {
@@ -31,27 +31,7 @@ angular.module('orbApp').service('Screens', function Screens($http) {
 
   var save = function () {
     if (isNodeApp()) {
-      var fs = require('fs');
-      var data = JSON.stringify(screens, null, 2);
-      fs.writeFile(screens.meta.absPath + 'projfile.json', data, function (err) {
-        if (err) {
-          console.log(err);
-        }
-      });
-
-      var scriptPromise = $http.get('resources/app.js');
-
-      scriptPromise.then(function (scriptFile) {
-
-        scriptFile = scriptFile.data.replace(/replaceMeWithProjectFile;/g, 'var projfile = ' + data);
-
-        fs.writeFile(screens.meta.absPath + 'app.js', scriptFile, function (err) {
-          if (err) {
-            console.log(err);
-          }
-        });
-      });
-
+      File.save.project(screens);
     } else {
       localStorage.screens = JSON.stringify(screens);
     }
@@ -104,60 +84,36 @@ angular.module('orbApp').service('Screens', function Screens($http) {
     return screensArr;
   };
 
-  var initProject = function (absPath) {
+  var initProject = function (absPath, name, isNewProject) {
 
     if (isNodeApp()) {
 
       var fs = require('fs');
 
-      try {
-        var projectData = fs.readFileSync(absPath + 'projfile.json', {encoding: 'utf8'});
-        screens = JSON.parse(projectData);
-      } catch (e) {
+      if (isNewProject) {
+        screens.meta.absPath = absPath + '/';
+        screens.meta.projectName = name;
 
-//        var projectData = fs.readFileSync(screens.meta.absPath + 'projfile.json', {encoding: 'utf8'});
-//
-//        screens = JSON.parse(projectData);
-//
+        File.save.path(screens.meta.absPath);
+//        File.create.project();
+        File.create.index();
+        File.create.style();
+        File.create.imgFolder();
 
-        var projfilePromise = $http.get('resources/projfile.json');
-
-        projfilePromise.then(function (projFile) {
-          fs.writeFile(absPath + 'projfile.json', JSON.stringify(projFile.data), function (err) {
-            if (err) {
-              console.log(err);
-            }
-          });
-
-          screens.meta.absPath = absPath;
-          save();
-        });
-
-        var indexPromise = $http.get('resources/index.html');
-
-        indexPromise.then(function (indexFile) {
-          fs.writeFile(absPath + 'index.html', indexFile.data, function (err) {
-            if (err) {
-              console.log(err);
-            }
-          });
-        });
-
-        var stylePromise = $http.get('resources/style.css');
-
-        stylePromise.then(function (styleFile) {
-          fs.writeFile(absPath + 'style.css', styleFile.data, function (err) {
-            if (err) {
-              console.log(err);
-            }
-          });
-        });
-
-        fs.mkdir(absPath + 'images');
+        save();
+      } else {
+        try {
+          var projectData = fs.readFileSync(absPath + '/projfile.json', {encoding: 'utf8'});
+          screens = JSON.parse(projectData);
+        } catch (e) {
+          console.log(e);
+        }
       }
+
 
     } else {
       screens.meta.absPath = 'storage';
+      screens.meta.projectName = 'Demo project';
       if (typeof localStorage.screens !== 'undefined') {
         screens = JSON.parse(localStorage.screens);
       }

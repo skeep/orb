@@ -5,7 +5,7 @@ angular.module('orbApp', [
 ])
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/designer/:designId', {
+      .when('/designer', {
         templateUrl: 'views/designer.html',
         controller: 'DesignerCtrl'
       })
@@ -14,6 +14,6 @@ angular.module('orbApp', [
         controller: 'MainCtrl'
       })
       .otherwise({
-        redirectTo: '/main'
+        redirectTo: '/designer'
       });
   });

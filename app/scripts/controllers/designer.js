@@ -6,6 +6,15 @@ angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routePara
     visible: true
   };
 
+  $scope.new = false;
+  $scope.open = false;
+  $scope.screens = [];
+
+  $scope.project = {
+    name: '',
+    path : ''
+  };
+
   var getLinkMaps = function () {
     $scope.linkMaps = Screens.get.linkMaps($scope.selectedId);
   };
@@ -18,9 +27,23 @@ angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routePara
     }
   };
 
-  $scope.initProject = function(){
+  var isValidPath = function(){
+    return true;
+  };
 
-    Screens.init(localStorage[$routeParams.designId]);
+  var isNodeApp = function () {
+    if (typeof require === 'undefined') {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  $scope.nodeApp = isNodeApp();
+
+  $scope.initProject = function(isNewProject){
+
+    Screens.init($scope.project.path, $scope.project.name, isNewProject);
 
     $scope.screens = Screens.list();
     $scope.screenMetaData = Screens.get.meta();
@@ -32,7 +55,14 @@ angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routePara
     $scope.links = [];
     $scope.selectedFileName = '';
 
+    $scope.new = false;
+    $scope.open = false;
+
   };
+
+  if(!$scope.nodeApp) {
+    $scope.initProject();
+  }
 
   $scope.loadScreen = function () {
     $scope.selectedFileName = Screens.get.fileName($scope.selectedId);
@@ -69,6 +99,34 @@ angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routePara
         visible: true
       };
     }
+  };
+
+  $scope.newProject = function(){
+    $scope.new = true;
+    $scope.open = false;
+  };
+
+  $scope.validProjectDetail = function(){
+    if($scope.project.name !== '' && isValidPath($scope.project.path)){
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  $scope.cancelNewProject = function(){
+    $scope.new = false;
+    $scope.project.name = '';
+    $scope.project.path = '';
+  };
+
+  $scope.cancelOpenProject = function(){
+    $scope.open = false;
+  };
+
+  $scope.openProject = function(){
+    $scope.open = true;
+    $scope.new = false;
   };
 
   $scope.$watch('linkMaps', function (n) {

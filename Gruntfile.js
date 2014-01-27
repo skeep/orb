@@ -350,6 +350,18 @@ module.exports = function (grunt) {
         configFile: 'karma.conf.js',
         singleRun: true
       }
+    },
+    nodewebkit: {
+      options: {
+        version: "0.8.4",
+        build_dir: './build',
+        // specifiy what to build
+        mac: true,
+        win: true,
+        linux32: false,
+        linux64: false
+      },
+      src: './dist/**/*'
     }
   });
 
@@ -403,5 +415,7 @@ module.exports = function (grunt) {
 //    'newer:jshint',
 //    'test',
     'build'
-  ]);
+  ])
+
+  grunt.registerTask('build-app', ['nodewebkit']);
 };

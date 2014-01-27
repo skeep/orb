@@ -1,28 +1,90 @@
-<div ng-init="initProject()">
+<div>
     <header>
-        <div ng-show="bar.visible">
-            <form class="form-inline well" role="form">
-                <div class="form-group">
-                    <label class="" for="name">Project name:</label>
-                    <input type="text" class="form-control" id="name" placeholder="Enter Project Name ..."
-                           ng-model="screenMetaData.projectName">
-                </div>
-                <div class="form-group">
-                    <label for="path" class="">Path:</label>
-                    <input type="text" class="form-control col-lg-5" id="path" placeholder="Enter path"
-                           ng-model="screenMetaData.absPath" disabled>
-                </div>
-                <div class="form-group">
-                    <label for="landing" class="">Landing Page:</label>
-                    <select ng-options="screen.name for screen in screens" ng-model="landingScreen" id="landing"
-                            class="form-control"></select>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-default" ng-click="refresh()">
-                        Refresh
+        <nav class="navbar navbar-inverse" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Orb</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="">Project <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="" ng-click="newProject()">New ...</a></li>
+                            <li class="divider"></li>
+                            <li><a href="" ng-click="openProject()">Open ...</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+
+                <form class="navbar-form navbar-left" role="search" ng-if="new">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Project Name" ng-model="project.name">
+                    </div>
+                    <div class="form-group">
+                        <input type="file" class="form-control" placeholder="Project Path" ng-model="project.path"
+                               nwdirectory>
+                    </div>
+                    <button type="submit" class="btn btn-primary" ng-disabled="!validProjectDetail()"
+                            ng-click="initProject(true)">Create...
                     </button>
-                </div>
-            </form>
+                    <button type="submit" class="btn btn-danger" ng-click="cancelNewProject()">Cancel
+                    </button>
+
+                </form>
+                <form class="navbar-form navbar-left" role="search" ng-if="open">
+                    <div class="form-group">
+                        <input type="file" class="form-control" placeholder="Project Path" ng-model="project.path"
+                               nwdirectory>
+                    </div>
+                    <button type="submit" class="btn btn-primary" ng-disabled="!project.path"
+                            ng-click="initProject()">Open
+                    </button>
+                    <button type="submit" class="btn btn-danger" ng-click="cancelOpenProject()">Cancel
+                    </button>
+
+                </form>
+                <form class="navbar-form navbar-left" role="search" ng-if="screenMetaData.projectName">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Project Name"
+                               ng-model="screenMetaData.projectName">
+                    </div>
+                    <div class="form-group">
+                        <select ng-options="screen.name for screen in screens" ng-model="landingScreen" id="landing"
+                                class="form-control"></select>
+                    </div>
+                    <button class="btn btn-default" ng-click="refresh()">
+                        <i class="glyphicon glyphicon-refresh"></i>
+                    </button>
+                </form>
+                <!--<span style="color: white">{{ project.path }}</span>-->
+                <!--<ul class="nav navbar-nav navbar-right">-->
+                <!--<li><a href="#">Help</a></li>-->
+                <!--<li class="dropdown">-->
+                <!--<a href="" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>-->
+                <!--<ul class="dropdown-menu">-->
+                <!--<li><a href="#">Action</a></li>-->
+                <!--<li><a href="#">Another action</a></li>-->
+                <!--<li><a href="#">Something else here</a></li>-->
+                <!--<li class="divider"></li>-->
+                <!--<li><a href="#">Separated link</a></li>-->
+                <!--</ul>-->
+                <!--</li>-->
+                <!--</ul>-->
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+        <div ng-show="bar.visible" ng-if="screens.length > 0">
             <div class="screen-list">
                 <div ng-repeat="screen in screens" class="screens">
                     <div class="screen">
@@ -46,8 +108,9 @@
         </div>
 
         <div class="bar" ng-click="toggleScreens()">
-            {{ bar.label }}
+            <span>{{ bar.label }}</span>
         </div>
+
     </header>
 
     <div class="selected-screen" id="{{ selectedId }}" ng-if="selectedId">
