@@ -33,7 +33,6 @@ angular.module('orbApp').service('File', function File($http) {
   };
 
   var saveFile = function (file, data) {
-    //console.log('saving project file with = ' + absPath + file, data);
     fs.writeFileSync(absPath + file, data);
   };
 

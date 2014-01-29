@@ -95,7 +95,6 @@ angular.module('orbApp').service('Screens', function Screens($http, File) {
         screens.meta.projectName = name;
 
         File.save.path(screens.meta.absPath);
-//        File.create.project();
         File.create.index();
         File.create.style();
         File.create.imgFolder();

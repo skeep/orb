@@ -5,13 +5,11 @@
   var width = document.body.clientWidth;
   var height = document.body.clientHeight;
 
-  console.log(height);
-
   var originalWidth = 2048;
   var originalHeight = 1536;
 
-  function factorForRetina(value) {
-    return value * 0.5;
+  function factorForRetina(value, factor) {
+    return (value / factor) * 100;
   }
 
   function createScreen(fileObj) {
@@ -38,7 +36,7 @@
     var target = projfile[linkObj.target].name;
     linkElem.setAttribute('href', '#' + target);
     linkElem.setAttribute('class', 'link');
-    linkElem.setAttribute('style', 'top:' + factorForRetina(linkObj.top) + 'px; left:' + factorForRetina(linkObj.left) + 'px; width:' + factorForRetina(linkObj.width) + 'px; height:' + factorForRetina(linkObj.height) + 'px');
+    linkElem.setAttribute('style', 'top:' + factorForRetina(linkObj.top, originalHeight) + '%; left:' + factorForRetina(linkObj.left, originalWidth) + '%; width:' + factorForRetina(linkObj.width, originalWidth) + '%; height:' + factorForRetina(linkObj.height, originalHeight) + '%');
     linkElem.addEventListener('click', function(event) {
       document.getElementById(selectedScreenId).setAttribute('style', 'display:none');
       var screenId = projfile.meta.fileKeyMap[(target + '.jpg')];
