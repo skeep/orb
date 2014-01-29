@@ -4,8 +4,6 @@ angular.module('orbApp').service('File', function File($http) {
 
   var absPath = '';
 
-  var count = '0';
-
   var isNodeApp = function () {
     if (typeof require === 'undefined') {
       return false;
@@ -26,7 +24,7 @@ angular.module('orbApp').service('File', function File($http) {
     var filePromise = $http.get('resources/' + file);
 
     filePromise.then(function (fileStream) {
-      fs.writeFile(absPath + file, JSON.stringify(fileStream.data), function (err) {
+      fs.writeFile(absPath + file, fileStream.data, function (err) {
         if (err) {
           console.log(err);
         }
@@ -35,7 +33,7 @@ angular.module('orbApp').service('File', function File($http) {
   };
 
   var saveFile = function (file, data) {
-    console.log('saving project file with = ' + absPath + file, data);
+    //console.log('saving project file with = ' + absPath + file, data);
     fs.writeFileSync(absPath + file, data);
   };
 

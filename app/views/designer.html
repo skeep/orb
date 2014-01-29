@@ -84,14 +84,12 @@
             </div>
             <!-- /.navbar-collapse -->
         </nav>
-        <div ng-show="bar.visible" ng-if="screens.length > 0">
+        <div ng-show="bar.visible" ng-show="screens.length > 0">
             <div class="screen-list">
                 <div ng-repeat="screen in screens" class="screens">
                     <div class="screen">
-
                         <input type="radio" ng-model="$parent.selectedId" ng-value="screen.id"
                                ng-change="loadScreen()"/>
-
                         <input type="checkbox" ng-model="linkMaps[screen.id]" ng-if="showLinkCheckbox(screen.id)"/>
 
                         <div class="image">
@@ -104,7 +102,6 @@
 
                 </div>
             </div>
-
         </div>
 
         <div class="bar" ng-click="toggleScreens()">
@@ -113,7 +110,8 @@
 
     </header>
 
-    <div class="selected-screen" id="{{ selectedId }}" ng-if="selectedId">
+
+    <div class="selected-screen" id="{{ selectedId }}" ng-show="selectedId">
         <img ng-src="{{ screenMetaData.absPath }}/images/{{ selectedFileName }}"/>
 
         <div ng-repeat="link in links"

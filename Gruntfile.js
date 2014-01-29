@@ -353,7 +353,7 @@ module.exports = function (grunt) {
     },
     nodewebkit: {
       options: {
-        version: "0.8.4",
+        version: '0.8.4',
         build_dir: './build',
         // specifiy what to build
         mac: true,
@@ -415,7 +415,7 @@ module.exports = function (grunt) {
 //    'newer:jshint',
 //    'test',
     'build'
-  ])
+  ]);
 
   grunt.registerTask('build-app', ['nodewebkit']);
 };

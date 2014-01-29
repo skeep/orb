@@ -12,8 +12,18 @@ angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routePara
 
   $scope.project = {
     name: '',
-    path : ''
+    path: ''
   };
+
+  $scope.screens = [];
+  $scope.screenMetaData = {};
+  $scope.landingScreen = {};
+
+  $scope.linkMaps = {};
+  $scope.selectedLinks = [];
+  $scope.selectedId = '';
+  $scope.links = [];
+  $scope.selectedFileName = '';
 
   var getLinkMaps = function () {
     $scope.linkMaps = Screens.get.linkMaps($scope.selectedId);
@@ -27,7 +37,7 @@ angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routePara
     }
   };
 
-  var isValidPath = function(){
+  var isValidPath = function () {
     return true;
   };
 
@@ -39,9 +49,34 @@ angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routePara
     }
   };
 
-  $scope.nodeApp = isNodeApp();
+  function setWatch() {
 
-  $scope.initProject = function(isNewProject){
+    $scope.$watch('linkMaps', function (n) {
+      if (!_.isEmpty($scope.selectedId)) {
+        Screens.put.links($scope.selectedId, n);
+        $scope.links = getLinks($scope.selectedId);
+      }
+    }, true);
+
+    $scope.$watch('selectedId', function (n) {
+      $scope.links = getLinks(n);
+    });
+
+    $scope.$watch('screenMetaData.absPath', function (n) {
+      Screens.put.path(n);
+    });
+
+    $scope.$watch('landingScreen', function (screen) {
+      Screens.put.landingScreen(screen.id);
+    });
+
+    $scope.$watch('screenMetaData.projectName', function (n) {
+      Screens.put.projectName(n);
+    });
+
+  }
+
+  $scope.initProject = function (isNewProject) {
 
     Screens.init($scope.project.path, $scope.project.name, isNewProject);
 
@@ -58,11 +93,9 @@ angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routePara
     $scope.new = false;
     $scope.open = false;
 
-  };
+    setWatch();
 
-  if(!$scope.nodeApp) {
-    $scope.initProject();
-  }
+  };
 
   $scope.loadScreen = function () {
     $scope.selectedFileName = Screens.get.fileName($scope.selectedId);
@@ -101,60 +134,45 @@ angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routePara
     }
   };
 
-  $scope.newProject = function(){
+  $scope.newProject = function () {
     $scope.new = true;
     $scope.open = false;
   };
 
-  $scope.validProjectDetail = function(){
-    if($scope.project.name !== '' && isValidPath($scope.project.path)){
+  $scope.validProjectDetail = function () {
+    if ($scope.project.name !== '' && isValidPath($scope.project.path)) {
       return true;
     } else {
       return false;
     }
   };
 
-  $scope.cancelNewProject = function(){
+  $scope.cancelNewProject = function () {
     $scope.new = false;
     $scope.project.name = '';
     $scope.project.path = '';
   };
 
-  $scope.cancelOpenProject = function(){
+  $scope.cancelOpenProject = function () {
     $scope.open = false;
   };
 
-  $scope.openProject = function(){
+  $scope.openProject = function () {
     $scope.open = true;
     $scope.new = false;
   };
 
-  $scope.$watch('linkMaps', function (n) {
-    if (!_.isEmpty($scope.selectedId)) {
-      Screens.put.links($scope.selectedId, n);
-      $scope.links = getLinks($scope.selectedId);
-    }
-  }, true);
-
-  $scope.$watch('selectedId', function (n) {
-    $scope.links = getLinks(n);
-  });
-
-  $scope.$watch('screenMetaData.absPath', function (n) {
-    Screens.put.path(n);
-  });
-
-  $scope.$watch('landingScreen', function (screen) {
-    Screens.put.landingScreen(screen.id);
-  });
-
-  $scope.$watch('screenMetaData.projectName', function(n){
-    Screens.put.projectName(n);
-  });
-
-  $scope.refresh = function(){
+  $scope.refresh = function () {
     Screens.refresh();
     $scope.screens = Screens.list();
   };
+
+  $scope.nodeApp = isNodeApp();
+
+  if (!$scope.nodeApp) {
+    $scope.initProject();
+  } else {
+    setWatch();
+  }
 
 });
