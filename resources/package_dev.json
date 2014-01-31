@@ -1,0 +1,22 @@
+{
+  "main": "index.html",
+  "name": "Orb",
+  "description": "LOP Builder",
+  "version": "0.1.0",
+  "keywords": [ "demo", "node-webkit" ],
+  "window": {
+    "title": "Orb Beta",
+    "icon": "link.png",
+    "toolbar": true,
+    "frame": true,
+    "width": 1024,
+    "height": 768,
+    "position": "center",
+    "min_width": 1024,
+    "min_height": 768,
+    "fullsceen" : true
+  },
+  "webkit": {
+    "plugin": true
+  }
+}

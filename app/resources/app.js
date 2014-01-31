@@ -2,15 +2,6 @@
 (function() {
   replaceMeWithProjectFile;
 
-  var width = document.body.clientWidth;
-  var height = document.body.clientHeight;
-
-  var originalWidth = 2048;
-  var originalHeight = 1536;
-
-  function factorForRetina(value, factor) {
-    return (value / factor) * 100;
-  }
 
   function createScreen(fileObj) {
     var screen = document.createElement('div');
@@ -36,7 +27,7 @@
     var target = projfile[linkObj.target].name;
     linkElem.setAttribute('href', '#' + target);
     linkElem.setAttribute('class', 'link');
-    linkElem.setAttribute('style', 'top:' + factorForRetina(linkObj.top, originalHeight) + '%; left:' + factorForRetina(linkObj.left, originalWidth) + '%; width:' + factorForRetina(linkObj.width, originalWidth) + '%; height:' + factorForRetina(linkObj.height, originalHeight) + '%');
+    linkElem.setAttribute('style', 'top:' + linkObj.top + '%; left:' + linkObj.left + '%; width:' + linkObj.width + '%; height:' + linkObj.height + '%');
     linkElem.addEventListener('click', function(event) {
       document.getElementById(selectedScreenId).setAttribute('style', 'display:none');
       var screenId = projfile.meta.fileKeyMap[(target + '.jpg')];

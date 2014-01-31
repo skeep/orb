@@ -5,7 +5,7 @@ angular.module('orbApp').directive('resizable', function (Screens) {
     link: function postLink(scope, element) {
       element.resizable({
         stop: function (event, ui) {
-          Screens.put.linkSize(scope.$parent.selectedId, element[0].id, ui.size);
+          Screens.put.linkSize(scope.$parent.selectedId, element[0].id, ui.size, scope.dimensions);
         }
       });
     }

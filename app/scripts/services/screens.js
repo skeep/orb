@@ -196,8 +196,8 @@ angular.module('orbApp').service('Screens', function Screens($http, File) {
                 target: key,
                 top: 0,
                 left: 0,
-                width: 100,
-                height: 100
+                width: 5,
+                height: 5
               };
             }
           } else {
@@ -208,14 +208,14 @@ angular.module('orbApp').service('Screens', function Screens($http, File) {
         });
         save();
       },
-      linkPosition: function (screen, link, position) {
-        screens[screen].links[link].top = position.top;
-        screens[screen].links[link].left = position.left;
+      linkPosition: function (screen, link, position, imageDimensions) {
+        screens[screen].links[link].top = (position.top / imageDimensions.height) * 100;
+        screens[screen].links[link].left = (position.left / imageDimensions.width) * 100;
         save();
       },
-      linkSize: function (screen, link, size) {
-        screens[screen].links[link].height = size.height;
-        screens[screen].links[link].width = size.width;
+      linkSize: function (screen, link, size, imageDimensions) {
+        screens[screen].links[link].height = (size.height / imageDimensions.height) * 100;
+        screens[screen].links[link].width = (size.width / imageDimensions.width) * 100;
         save();
       },
       path: function (path) {

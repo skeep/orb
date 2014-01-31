@@ -1,19 +1,19 @@
 {
   "main": "index.html",
   "name": "Orb",
-  "description": "demo app of node-webkit",
+  "description": "LOP Builder",
   "version": "0.1.0",
   "keywords": [ "demo", "node-webkit" ],
   "window": {
     "title": "Orb Beta",
     "icon": "link.png",
-    "toolbar": true,
+    "toolbar": false,
     "frame": true,
-    "width": 800,
-    "height": 500,
+    "width": 1024,
+    "height": 768,
     "position": "center",
-    "min_width": 400,
-    "min_height": 200,
+    "min_width": 1024,
+    "min_height": 768,
     "fullsceen" : true
   },
   "webkit": {

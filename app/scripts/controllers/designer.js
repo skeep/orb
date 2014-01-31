@@ -1,4 +1,4 @@
-angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routeParams, Screens) {
+angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routeParams, $timeout, Screens) {
   'use strict';
 
   $scope.bar = {
@@ -25,6 +25,11 @@ angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routePara
   $scope.links = [];
   $scope.selectedFileName = '';
 
+  $scope.dimensions = {
+    width : 0,
+    height :0
+  };
+
   var getLinkMaps = function () {
     $scope.linkMaps = Screens.get.linkMaps($scope.selectedId);
   };
@@ -49,6 +54,13 @@ angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routePara
     }
   };
 
+  var getImageDimensions = function(){
+    $scope.dimensions = {
+      width : $('.selected-image').width(),
+      height :$('.selected-image').height()
+    };
+  };
+
   function setWatch() {
 
     $scope.$watch('linkMaps', function (n) {
@@ -60,6 +72,7 @@ angular.module('orbApp').controller('DesignerCtrl', function ($scope, $routePara
 
     $scope.$watch('selectedId', function (n) {
       $scope.links = getLinks(n);
+      $timeout(getImageDimensions, 100);
     });
 
     $scope.$watch('screenMetaData.absPath', function (n) {

@@ -54,37 +54,29 @@
                     </button>
 
                 </form>
-                <form class="navbar-form navbar-left" role="search" ng-show="screenMetaData.projectName">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Project Name"
-                               ng-model="screenMetaData.projectName">
-                    </div>
-                    <div class="form-group">
-                        <select ng-options="screen.name for screen in screens" ng-model="landingScreen" id="landing"
-                                class="form-control"></select>
-                    </div>
-                    <button class="btn btn-default" ng-click="refresh()">
-                        <i class="glyphicon glyphicon-refresh"></i>
-                    </button>
-                </form>
-                <!--<span style="color: white">{{ project.path }}</span>-->
-                <!--<ul class="nav navbar-nav navbar-right">-->
-                <!--<li><a href="#">Help</a></li>-->
-                <!--<li class="dropdown">-->
-                <!--<a href="" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>-->
-                <!--<ul class="dropdown-menu">-->
-                <!--<li><a href="#">Action</a></li>-->
-                <!--<li><a href="#">Another action</a></li>-->
-                <!--<li><a href="#">Something else here</a></li>-->
-                <!--<li class="divider"></li>-->
-                <!--<li><a href="#">Separated link</a></li>-->
-                <!--</ul>-->
-                <!--</li>-->
-                <!--</ul>-->
+
             </div>
             <!-- /.navbar-collapse -->
         </nav>
         <div ng-show="bar.visible" ng-show="screens.length > 0">
+            <div class="row">
+                <div class="col-lg-12">
+                    <form class="navbar-form navbar-left" role="search" ng-show="screenMetaData.projectName">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Project Name"
+                                   ng-model="screenMetaData.projectName">
+                        </div>
+                        <div class="form-group">
+                            <select ng-options="screen.name for screen in screens" ng-model="landingScreen" id="landing"
+                                    class="form-control"></select>
+                        </div>
+                        <button class="btn btn-default" ng-click="refresh()">
+                            <i class="glyphicon glyphicon-refresh"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
             <div class="screen-list">
                 <div ng-repeat="screen in screens" class="screens">
                     <div class="screen">
@@ -112,10 +104,20 @@
 
 
     <div class="selected-screen" id="{{ selectedId }}" ng-show="selectedId">
-        <img ng-src="{{ screenMetaData.absPath }}/images/{{ selectedFileName }}"/>
+
+        <div style="position: absolute;
+                    top: 5px;
+                    right: 5px;
+                    color: white;
+                    text-shadow: 0 0 2px rgba(0,0,0,1), 0 2px 3px rgba(0,0,0,1);
+                    font-size: 16px;
+                    font-weight: bold;">{{ dimensions.width }} X {{ dimensions.height }}
+        </div>
+
+        <img ng-src="{{ screenMetaData.absPath }}/images/{{ selectedFileName }}" class="img-responsive selected-image"/>
 
         <div ng-repeat="link in links"
-             style="top:{{ link.top }}px; left:{{ link.left }}px; width:{{ link.width }}px; height:{{ link.height }}px; position:absolute"
+             style="top:{{ link.top }}%; left:{{ link.left }}%; width:{{ link.width }}%; height:{{ link.height }}%; position:absolute"
              class="link" id="{{ link.target.id }}" draggable resizable data-draggable-handle="span.handle"
              data-draggable-containment="div.selected-screen">
         <span class="handle">{{ link.target.name }} &nbsp; <i

@@ -8,7 +8,7 @@ angular.module('orbApp').directive('draggable', function (Screens) {
         containment: 'div.selected-screen',
         scope : {},
         stop: function (event, ui) {
-          Screens.put.linkPosition(scope.$parent.selectedId, element[0].id, ui.position);
+          Screens.put.linkPosition(scope.$parent.selectedId, element[0].id, ui.position, scope.dimensions );
         }
       });
     }
